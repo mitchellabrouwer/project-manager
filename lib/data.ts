@@ -1,8 +1,16 @@
-export const getProjects = async (prisma, userId) => {
+/* eslint-disable camelcase */
+export const getProjects = async (prisma, user_id) => {
   const projects = await prisma.project.findMany({
     where: {
       owner: {
-        id: userId,
+        id: user_id,
+      },
+    },
+    include: {
+      todos: {
+        orderBy: {
+          id: "desc",
+        },
       },
     },
   });

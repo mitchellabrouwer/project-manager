@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -7,7 +8,6 @@ export default function Home() {
 
   const { data: session, status } = useSession();
 
-  console.log("session", session);
   const loading = status === "loading";
 
   if (loading) {
@@ -35,9 +35,12 @@ export default function Home() {
         <p className="mt-10">Free 7 days trial then just $19.99/m</p>
 
         <div className="mt-10">
-          <a className="bg-black px-5 py-2 text-white" href="/api/auth/signin">
+          <Link
+            className="bg-black px-5 py-2 text-white"
+            href="/api/auth/signin"
+          >
             Log in
-          </a>
+          </Link>
         </div>
       </div>
     </div>

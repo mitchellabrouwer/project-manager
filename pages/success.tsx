@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function Success() {
   const router = useRouter();
-  const { sessionId } = router.query;
+  const { session_id } = router.query;
 
   const { data: session, status } = useSession();
 
@@ -13,20 +14,21 @@ export default function Success() {
   useEffect(() => {
     const call = async () => {
       await fetch("/api/stripe/success", {
+        method: "POST",
         body: JSON.stringify({
-          sessionId,
+          session_id,
         }),
         headers: {
           "Content-Type": "application/json",
         },
-        method: "POST",
       });
 
-      //  @ts-ignore
+      // @ts-ignore
       window.location = "/dashboard";
     };
+
     call();
-  }, [sessionId]);
+  }, []);
 
   if (loading) {
     return null;

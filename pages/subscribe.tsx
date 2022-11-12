@@ -15,24 +15,23 @@ export default function Subscribe() {
   }
 
   if (!session) {
-    router.push("/");
-    return;
+    return router.push("/");
   }
 
+  console.log("session", session.user);
   if (session.user.isSubscriber) {
-    router.push("/dashboard");
-    return;
+    return router.push("/dashboard");
   }
 
   return (
     <div>
+      <Script src="https://js.stripe.com/v3/" />
+
       <Head>
         <title>Project Manager</title>
         <meta name="description" content="Private Area" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Script src="https://js.stripe.com/v3/" />
 
       <div className="text-center ">
         <h1 className=" mt-20 text-2xl font-extrabold">Project Manager</h1>
@@ -44,18 +43,26 @@ export default function Subscribe() {
         <button
           className="mt-10 bg-black px-5 py-2 text-white"
           onClick={async () => {
-            const res = await fetch("/api/stripe/session", { method: "POST" });
+            const res = await fetch("/api/stripe/session", {
+              method: "POST",
+            });
+
             const data = await res.json();
 
-            if (data.status === "edit") {
-              return alert(data.message);
+            if (data.status === "error") {
+              alert(data.message);
+              return;
             }
+
             const { sessionId } = data;
             const { stripePublicKey } = data;
+
             // @ts-ignore
             // eslint-disable-next-line no-undef
             const stripe = Stripe(stripePublicKey);
-            stripe.redirectToCheckout({ sessionId });
+            stripe.redirectToCheckout({
+              sessionId,
+            });
           }}
           type="button"
         >

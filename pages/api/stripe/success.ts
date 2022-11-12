@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
@@ -19,17 +20,17 @@ export default async (req, res) => {
 
   // eslint-disable-next-line global-require
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-  const stripeSession = await stripe.checkout.sessions.retrieve(
+  const stripe_session = await stripe.checkout.sessions.retrieve(
     req.body.session_id
   );
 
   await prisma.user.update({
     data: {
       isSubscriber: true,
-      stripeSubscriptionId: stripeSession.subscription,
+      stripeSubscriptionId: stripe_session.subscription,
     },
     where: {
-      id: stripeSession.client_reference_id,
+      id: stripe_session.client_reference_id,
     },
   });
 

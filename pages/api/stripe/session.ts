@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
@@ -8,22 +9,18 @@ export default async (req, res) => {
   }
 
   const session = await getSession({ req });
-  if (!session) {
-    return res.status(401).json({ message: "Not logged in" });
-  }
-
+  if (!session) return res.status(401).json({ message: "Not logged in" });
   const user = await prisma.user.findUnique({
     where: {
       id: session.user.id,
     },
   });
 
-  if (!user) {
-    return res.status(401).json({ message: "User not found" });
-  }
+  if (!user) return res.status(401).json({ message: "User not found" });
+
   // eslint-disable-next-line global-require
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-  const stripeSession = await stripe.checkout.sessions.create({
+  const stripe_session = await stripe.checkout.sessions.create({
     billing_address_collection: "auto",
     line_items: [
       {
@@ -44,10 +41,10 @@ export default async (req, res) => {
     "Content-Type": "application/json",
   });
 
-  return res.end(
+  res.end(
     JSON.stringify({
       status: "success",
-      sessionId: stripeSession.id,
+      sessionId: stripe_session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
     })
   );

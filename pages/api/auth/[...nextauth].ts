@@ -29,10 +29,8 @@ export default NextAuth({
 
   callbacks: {
     session: async ({ session, user }) => {
-      session.user.image = user.image;
-      session.user.name = user.name;
       session.user.id = user.id;
-      session.user.username = user.username;
+      session.user.isSubscriber = user.isSubscriber;
       return Promise.resolve(session);
     },
   },
