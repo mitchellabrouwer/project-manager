@@ -48,7 +48,7 @@
         "unnamedComponents": "arrow-function"
       }
     ],
-
+    "consistent-return": "off",
     "react/jsx-props-no-spreading": "off",
     "react/self-closing-comp": "off",
     "react/require-default-props": "off",
